@@ -1,0 +1,25 @@
+﻿<div>
+    <h3 class="panel-heading">Owners</h3>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-center">Pets count</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="owner in owners" ng-click="showPets(owner)">
+                    <td>{{owner.name}}</td>
+                    <td class="text-center">{{owner.petsCount}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-xs btn-primary" ng-click="delete(owner)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

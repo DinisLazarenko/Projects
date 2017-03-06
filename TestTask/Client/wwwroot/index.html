@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="testTask">
+<head>
+    <title>Items Editor</title>
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <script src="../js/angular.js"></script>
+    <script src="../js/angular-resource.js"></script>
+    <script src="../js/AppScripts/modules.js" type="text/javascript"></script>
+    <script src="../js/AppScripts/constants.js" type="text/javascript"></script>
+    <script src="../js/AppScripts/base-controller.js"></script>
+    <script src="../js/AppScripts/owner-controller.js"></script>
+    <script src="../js/AppScripts/pets-controller.js"></script>
+</head>
+
+<body ng-controller="baseCtrl">
+    <div class="panel panel-primary">
+        <ng-include ng-controller="ownersCtrl" src="'ViewParts/owners.html'" ng-show="currentView == 'owners'"></ng-include>
+        <ng-include ng-controller="petsCtrl" src="'ViewParts/pets.html'" ng-show="currentView == 'pets'"></ng-include>
+    </div>
+</body>
+</html>
