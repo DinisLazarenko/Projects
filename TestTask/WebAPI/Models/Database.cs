@@ -61,25 +61,24 @@ namespace WebAPI.Models
 
         #region ExecuteSQLCommand<T>
         //Execute SQL command throw reader and return data
-        public static IEnumerable ExecuteSQLCommand<T>(string SQLCommand)
+        public static List<OwnerModel> ExecuteSQLCommand(string SQLCommand, Type dataType)
         {
             command.CommandText = SQLCommand;
             connection.Open();
             SQLiteDataReader reader = command.ExecuteReader();
-            T checkType = default(T);
             connection.Close();
-            if (checkType is OwnerModel)
-            {
-                var result = ReadList(reader, ownerGenerator);
+            //if (checkType is OwnerModel)
+            //{
+                var result = ReadList(reader, ownerGenerator).ToList();
                 connection.Close();
                 return result;
-            }
-            else
-            {
-                var result = ReadList(reader, ownerHasGenerator);
-                connection.Close();
-                return result;
-            }
+            //}
+            //else
+            //{
+            //    var result = ReadList(reader, ownerHasGenerator);
+            //    connection.Close();
+            //    return result;
+            //}
         }
         #endregion
 

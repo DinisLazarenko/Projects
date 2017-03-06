@@ -16,6 +16,10 @@ namespace WebAPI.Models
 
         public OwnerModel Create(OwnerModel owner)
         {
+            Database.ExecuteSQLCommand(String.Format("INSERT INTO owners (Name, PetsCount) VALUES ('{0}', 0)", owner.Name));
+
+            IEnumerable result = Database.ExecuteSQLCommand<OwnerModel>("SELECT * FROM Owners WHERE ID = (SELECT MAX(ID) FROM Owners);");
+            List<OwnerModel> list = new List<OwnerModel>();
             return new OwnerModel();
         }
 
