@@ -16,7 +16,7 @@ namespace WebAPI.Models
 
         static string sqlCommand_createTableOwners = "create table if not exists Owners (ID integer PRIMARY KEY autoincrement, Name TEXT, PetsCount int);";
         
-        static string databaseName = HttpContext.Current.Server.MapPath("~/App_Data/") + @".\OwnersAndPets.db";
+        static string databaseName = HttpContext.Current.Server.MapPath("~/App_Data/") + "TestTaskDB.db";
 
         #region constructor
         // Check database file (if file does not exist - create file) and initializing variables connection and command
@@ -28,7 +28,7 @@ namespace WebAPI.Models
         }
         #endregion
 
-        #region CheckDatabase
+        #region void CheckDatabase()
         //Check that database file exist, if no - create new database file
         private static void CheckDatabase()
         {
@@ -40,7 +40,20 @@ namespace WebAPI.Models
         }
         #endregion
 
-        #region ExecuteSQLCommand
+        #region bool CreateTable(string tableName)
+        //Create additional tables to new owner
+        public static bool CreateTable(string tableName)
+        {
+            string SQLCommand = "CREATE TABLE IF NOT EXISTS {0} (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT);";
+            if (ExecuteSQLCommand(String.Format(SQLCommand, tableName + "_Pets")))
+            {
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region bool ExecuteSQLCommand(string SQLCommand)
         //open connection, execute sql command and close connection
         public static bool ExecuteSQLCommand(string SQLCommand)
         {
@@ -59,55 +72,20 @@ namespace WebAPI.Models
         }
         #endregion
 
-        #region ExecuteSQLCommand<T>
+        #region List<T> ExecuteSQLCommand<T>(string SQLCommand, Func<IDataRecord, T> generator)
         //Execute SQL command throw reader and return data
-        public static List<OwnerModel> ExecuteSQLCommand(string SQLCommand, Type dataType)
+        public static List<T> ExecuteSQLCommandWithReader<T>(string SQLCommand, Func<IDataRecord, T> generator)
         {
             command.CommandText = SQLCommand;
             connection.Open();
             SQLiteDataReader reader = command.ExecuteReader();
-            connection.Close();
-            //if (checkType is OwnerModel)
-            //{
-                var result = ReadList(reader, ownerGenerator).ToList();
-                connection.Close();
-                return result;
-            //}
-            //else
-            //{
-            //    var result = ReadList(reader, ownerHasGenerator);
-            //    connection.Close();
-            //    return result;
-            //}
-        }
-        #endregion
-
-        #region ReadList<T>
-        //Transform data from reader to Model
-        public static IEnumerable<T> ReadList<T>(this IDataReader reader, Func<IDataRecord, T> generator)
-        {
+            List<T> list = new List<T>();
             while (reader.Read())
-                yield return generator(reader);
+                 list.Add(generator(reader));
+            reader.Close();
+            connection.Close();
+            return list;
         }
-        #endregion
-
-        #region ownerGenerator
-        //behavior of ownerGenerator
-        static Func<IDataRecord, OwnerModel> ownerGenerator = x => new OwnerModel
-        {
-            ID = x.GetInt32(0),
-            Name = x.GetString(1),
-            PetsCount = x.GetInt32(2)
-        };
-        #endregion
-
-        #region ownerHasGenerator
-        //behavior of ownerHasGenerator
-        static Func<IDataRecord, OwnerHasModel> ownerHasGenerator = x => new OwnerHasModel
-        {
-            ID = x.GetInt32(0),
-            Name = x.GetString(1)
-        };
         #endregion
     }
 }

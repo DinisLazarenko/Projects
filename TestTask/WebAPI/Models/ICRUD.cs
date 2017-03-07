@@ -10,8 +10,8 @@ namespace WebAPI.Models
     {
         T Create(T obj);
         T Retrieve(int ID);
-        IEnumerable Retrieve();
+        List<T> Retrieve();
         T Update(T obj);
-        void Delete(T obj);
+        bool Delete(int ID);
     }
 }

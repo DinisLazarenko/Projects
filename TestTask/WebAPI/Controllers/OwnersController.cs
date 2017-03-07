@@ -20,6 +20,20 @@ namespace WebAPI.Controllers
             return result;
         }
 
+        [HttpGet]
+        public HttpResponseMessage GetOwners(int ID)
+        {
+            OwnersTable ownersTable = new OwnersTable();
+            var owner = ownersTable.Retrieve(ID);
+            if (owner != null)
+            {
+                var result = new HttpResponseMessage(HttpStatusCode.OK);
+                result.Content = new StringContent(JsonConvert.SerializeObject(owner));
+                return result;
+            }
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);  
+        }
+
         [HttpPost]
         public HttpResponseMessage AddOwner([FromBody]OwnerModel newOwner)
         {
@@ -27,6 +41,17 @@ namespace WebAPI.Controllers
             OwnersTable ownersTable = new OwnersTable();
             result.Content = new StringContent(JsonConvert.SerializeObject(ownersTable.Create(newOwner)));
             return result;
+        }
+
+        [HttpDelete]
+        public HttpResponseMessage DeleteOwner(int ID)
+        {
+            OwnersTable ownersTable = new OwnersTable();
+            if (ownersTable.Delete(ID))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
     }
 }

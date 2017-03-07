@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
+using System.Data;
 using System.Linq;
-using System.Web;
 
 namespace WebAPI.Models
 {
@@ -12,35 +10,76 @@ namespace WebAPI.Models
     public class OwnersTable : ICRUD<OwnerModel>
     {
 
-        string sqlCommand_createTablesOwnerHas;
-
+        #region OwnerModel Create(OwnerModel owner)
+        //Create new owner record in DB, and return new record with ID
         public OwnerModel Create(OwnerModel owner)
         {
-            Database.ExecuteSQLCommand(String.Format("INSERT INTO owners (Name, PetsCount) VALUES ('{0}', 0)", owner.Name));
-
-            IEnumerable result = Database.ExecuteSQLCommand<OwnerModel>("SELECT * FROM Owners WHERE ID = (SELECT MAX(ID) FROM Owners);");
-            List<OwnerModel> list = new List<OwnerModel>();
-            return new OwnerModel();
+            if (Database.CreateTable(owner.Name))
+            { 
+                string SQLCommand = "INSERT INTO Owners (Name, PetsCount) VALUES ('{0}', 0);";
+                Database.ExecuteSQLCommand(String.Format(SQLCommand, owner.Name));
+                SQLCommand = "SELECT IDENT_CURRENT('Owners')";
+                return Database.ExecuteSQLCommandWithReader<OwnerModel>(SQLCommand, ownerGenerator).FirstOrDefault();
+            }
+            else
+            {
+                return new OwnerModel();
+            }
         }
+        #endregion
 
-        public void Delete(OwnerModel obj)
+        #region bool Delete(int ID)
+        //Delete owner additional tables and owner record by ID
+        public bool Delete(int ID)
         {
-            throw new NotImplementedException();
+            string SQLCommand = "SELECT * FROM Owners WHERE ID={0};";
+            var result = Database.ExecuteSQLCommandWithReader<OwnerModel>(String.Format(SQLCommand, ID), ownerGenerator);
+            if (result.Count != 0)
+            {
+                SQLCommand = "DROP TABLE {0}_Pets;";
+                Database.ExecuteSQLCommand(String.Format(SQLCommand, result.First().Name));
+                SQLCommand = "DELETE FROM Owners WHERE ID={0}";
+                Database.ExecuteSQLCommand(String.Format(SQLCommand, ID));
+                return true;
+            }
+            return false;
         }
+        #endregion
 
-        public IEnumerable Retrieve()
+        #region List<OwnerModel> Retrieve()
+        //Get all owners from DB
+        public List<OwnerModel> Retrieve()
         {
-            return Database.ExecuteSQLCommand<OwnerModel>("select * from Owners;");
+            string SQLCommand = "SELECT * FROM Owners;";
+            return Database.ExecuteSQLCommandWithReader<OwnerModel>(SQLCommand, ownerGenerator);
         }
+        #endregion
 
+        #region OwnerModel Retrieve(int ID)
+        //Get single owner from DB by ID
         public OwnerModel Retrieve(int ID)
         {
-            return null;
+            string SQLCommand = "SELECT * FROM Owners WHERE ID={0};";
+            return Database.ExecuteSQLCommandWithReader<OwnerModel>(String.Format(SQLCommand, ID), ownerGenerator).FirstOrDefault();
         }
+        #endregion
 
-        public OwnerModel Update(OwnerModel obj)
+        #region OwnerModel Update(OwnerModel owner)
+        //Update owner record in DB
+        public OwnerModel Update(OwnerModel owner)
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region ownerGenerator
+        //behavior of ownerGenerator
+        static Func<IDataRecord, OwnerModel> ownerGenerator = x => new OwnerModel
+        {
+            ID = x.GetInt32(0),
+            Name = x.GetString(1),
+            PetsCount = x.GetInt32(2)
+        };
+        #endregion
     }
 }

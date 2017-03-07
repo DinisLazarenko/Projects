@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebAPI.Models
 {
-    public class OwnerHasModel
+    public class OwnerHasRespond
     {
         public int ID { get; set; }
         public string Name { get; set; }
