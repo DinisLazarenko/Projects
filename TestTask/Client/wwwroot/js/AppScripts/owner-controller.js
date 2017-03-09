@@ -1,6 +1,10 @@
 ﻿app.controller("ownersCtrl", function ($scope, $http, $resource, baseUrl) {
 
-    $scope.ownersResource = $resource(baseUrl + $scope.currentView);
+    $scope.pagedItems = [];
+    $scope.currentPage = 0;
+    $scope.ownersResource = $resource(baseUrl + "owners");
+    $scope.limitValue = 5;
+    $scope.limitRange = [5, 10, 15];
 
     function refresh() {
         $scope.owners = $scope.ownersResource.query();
@@ -20,5 +24,4 @@
     }
 
     refresh();
-
 })

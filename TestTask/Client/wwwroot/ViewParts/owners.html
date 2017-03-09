@@ -1,5 +1,6 @@
-﻿<div>
+﻿<div class="owners">
     <h3 class="panel-heading">Owners</h3>
+    <h3 class="text-info"><select ng-model="limitValue" ng-options="item for item in limitRange"></select></h3>
     <div class="panel-body">
         <table class="table table-striped">
             <thead>
@@ -9,8 +10,29 @@
                     <th></th>
                 </tr>
             </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="pagination">
+                            <ul>
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href="" ng-click="prevPage()"></a>
+                                </li>
+                                <li ng-repeat="n in range(owners.length)" 
+                                    ng-class="{active: n == currentPage}"
+                                    ng-click="setPage()">
+                                    <a href="" ng-bind="n + 1">1</a>
+                                </li>
+                                <li ng-class="{disabled: currentPage == owners.length - 1}">
+                                    <a href="" ng-click="nextPage()">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
             <tbody>
-                <tr ng-repeat="owner in owners" ng-click="showPets(owner)">
+                <tr ng-repeat="owner in owners | limitTo : limitValue" ng-click="showPets(owner)">
                     <td>{{owner.name}}</td>
                     <td class="text-center">{{owner.petsCount}}</td>
                     <td class="text-center">

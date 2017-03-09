@@ -4,6 +4,17 @@ html, body {
     margin: 0;
 }
 
+.owners {
+    }
+    
+    .text-info {
+        display: inline-block;
+    }
+    
+    .panel-heading {
+        display: inline-block;
+    }
+
 .container {
     max-width: 950px;
     margin: 0 auto;
@@ -18,6 +29,7 @@ header {
 nav a {
     color: #9d9d9d;
     text-decoration: none;
+    display: block;
 }
 
 nav ul {

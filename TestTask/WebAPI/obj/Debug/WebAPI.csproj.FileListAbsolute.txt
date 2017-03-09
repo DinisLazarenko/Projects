@@ -137,7 +137,6 @@ D:\Den\Projects\TestTask\WebAPI\bin\ru\System.Web.Http.resources.dll
 D:\Den\Projects\TestTask\WebAPI\bin\ru\System.Web.Http.WebHost.resources.dll
 D:\Den\Projects\TestTask\WebAPI\bin\EnvDTE.xml
 D:\Den\Projects\TestTask\WebAPI\obj\Debug\WebAPI.csprojResolveAssemblyReference.cache
-D:\Den\Projects\TestTask\WebAPI\bin\ru\Microsoft.VisualStudio.GraphModel.resources.dll
 D:\Den\Projects\TestTask\WebAPI\bin\System.Data.SQLite.dll
 D:\Den\Projects\TestTask\WebAPI\bin\System.Data.SQLite.EF6.dll
 D:\Den\Projects\TestTask\WebAPI\bin\System.Data.SQLite.Linq.dll
