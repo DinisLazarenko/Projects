@@ -10,29 +10,8 @@
                     <th></th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <td colspan="6">
-                        <div class="pagination">
-                            <ul>
-                                <li ng-class="{disabled: currentPage == 0}">
-                                    <a href="" ng-click="prevPage()"></a>
-                                </li>
-                                <li ng-repeat="n in range(owners.length)" 
-                                    ng-class="{active: n == currentPage}"
-                                    ng-click="setPage()">
-                                    <a href="" ng-bind="n + 1">1</a>
-                                </li>
-                                <li ng-class="{disabled: currentPage == owners.length - 1}">
-                                    <a href="" ng-click="nextPage()">Next</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
             <tbody>
-                <tr ng-repeat="owner in owners | limitTo : limitValue" ng-click="showPets(owner)">
+                <tr ng-repeat="owner in pagedItems[currentPage]" ng-click="showPets(owner)">
                     <td>{{owner.name}}</td>
                     <td class="text-center">{{owner.petsCount}}</td>
                     <td class="text-center">
@@ -43,5 +22,22 @@
                 </tr>
             </tbody>
         </table>
+        <div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li ng-disabled="currentPage == 0" ng-click="prevPage()">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="pageNumber in range(pagedItems.length)" ng-class="{active: pageNumber == currentPage}" href="" ng-click="setPage()"><a href="" ng-bind="pageNumber + 1">1</a></li>
+                    <li ng-disabled="currentPage == numberOfPages" ng-click="currentPage = currentPage + 1">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
