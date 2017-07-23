@@ -10,11 +10,9 @@ using System.Net;
 
 namespace Owners.Controllers
 {
-    //Comment for HomeController
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-
         private AppDbContext ctx = new AppDbContext();
 
         // GET api/home
